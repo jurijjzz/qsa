@@ -34,5 +34,3 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 # TODO: Add tests and install targets if needed.
 target_link_libraries(${PROJ_NAME} ${Spinnaker_LIBS})
 target_include_directories(${PROJ_NAME} PUBLIC ${PROJECT_SOURCE_DIR} ${Spinnaker_INCLUDE_DIR})
-
-
