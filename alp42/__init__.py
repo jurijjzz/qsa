@@ -1,1 +1,1 @@
-from alp42 import *
+from .alp42 import *

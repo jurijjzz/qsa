@@ -11,6 +11,7 @@ from alp42 import (
     Sequence, SequenceControl, SequenceValue
 )
 
+
 os.add_dll_directory("C:/Program Files/Teledyne/Spinnaker/bin64/vs2015")
 import camera
 
@@ -22,10 +23,10 @@ print(dev[InquireType.DeviceNumber])
 print(dev[InquireType.DevDMDType])
 print(dev[InquireType.AvailableMemory])
 
-width = 1024
-height = 768
-# width = dev.width
-# height = dev.height
+# width = 1024
+# height = 768
+width = dev.width
+height = dev.height
 
 cell = 128
 lg2_c = np.log2(cell)
