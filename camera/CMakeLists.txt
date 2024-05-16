@@ -1,9 +1,9 @@
-﻿# CMakeList.txt : CMake project for qsa, include source and define
-# project specific logic here.
-#
-set(PROJ_NAME "qsa")
-set(PROJ_INCLUDES "")
-set(PROJ_LIBRARIES "")
+﻿cmake_minimum_required(VERSION 3.24)
+project(camera_bind)
+
+set(CMAKE_CXX_STANDARD 20)
+
+find_package(pybind11 CONFIG)
 
 # Spinnaker SDK
 if(WIN32)
@@ -13,6 +13,7 @@ if(WIN32)
   link_directories(
     "C:/Program Files/Teledyne/Spinnaker/lib64/vs2015")
 endif(WIN32)
+
 if(UNIX)
   add_definitions(-DLINUX)
   find_path(Spinnaker_INCLUDE_DIR Spinnaker.h 
@@ -25,12 +26,12 @@ if(UNIX)
 endif(UNIX)
 
 # Add source to this project's executable.
-add_executable (qsa "main.cpp")
+add_executable (camera_test "main.cpp")
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET qsa PROPERTY CXX_STANDARD 20)
-  endif()
+target_link_libraries(camera_test PUBLIC ${Spinnaker_LIBS})
+target_include_directories(camera_test PUBLIC ${PROJECT_SOURCE_DIR} ${Spinnaker_INCLUDE_DIR})
 
-# TODO: Add tests and install targets if needed.
-target_link_libraries(${PROJ_NAME} ${Spinnaker_LIBS})
-target_include_directories(${PROJ_NAME} PUBLIC ${PROJECT_SOURCE_DIR} ${Spinnaker_INCLUDE_DIR})
+
+pybind11_add_module(camera camera_bind.cpp)
+target_link_libraries(camera PUBLIC ${Spinnaker_LIBS})
+target_include_directories(camera PUBLIC ${PROJECT_SOURCE_DIR} ${Spinnaker_INCLUDE_DIR})
