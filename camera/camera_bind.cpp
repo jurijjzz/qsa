@@ -50,6 +50,24 @@ void start_camera() {
 
 		// Set integer value from entry node as new value of enumeration node
 		ptrAcquisitionMode->SetIntValue(acquisitionModeContinuous);
+
+		Spinnaker::GenApi::CEnumerationPtr pixelFormat = nodeMap.GetNode("PixelFormat");
+		if (Spinnaker::GenApi::IsAvailable(pixelFormat) && Spinnaker::GenApi::IsWritable(pixelFormat)) {
+			Spinnaker::GenApi::CEnumEntryPtr mono16 = pixelFormat->GetEntryByName("Mono16");
+			if (Spinnaker::GenApi::IsAvailable(mono16) && Spinnaker::GenApi::IsReadable(mono16)) {
+				pixelFormat->SetIntValue(mono16->GetValue());
+				std::cout << "Pixel format set to Mono16." << std::endl;
+			}
+			else {
+				std::cerr << "Mono16 format not available." << std::endl;
+				return -1;
+			}
+		}
+		else {
+			std::cerr << "Pixel format not writable." << std::endl;
+			return -1;
+		}
+
 	} catch (Spinnaker::Exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		cam->DeInit();
@@ -66,23 +84,33 @@ void stop_camera() {
 	syscam->ReleaseInstance();
 }
 
-void take_picture(std::string filename) {
+void take_picture(std::string filename, std::size_t n=10) {
 	try {
 		// Start taking picture
 		cam->BeginAcquisition();
-		std::cout << "Taking image..." << std::endl;
+        std::cout << "Taking images..." << std::endl;
 
-		Spinnaker::ImagePtr pImage = cam->GetNextImage();
+        // Capturing n images
+        for (size_t i = 0; i < n; i++) {
+            Spinnaker::ImagePtr pImage = cam->GetNextImage();
+            if (pImage->IsIncomplete()) {
+                std::cerr << "Image incomplete, skipping..." << std::endl;
+            }
+            else {
+                images.push_back(pImage);
+                std::cout << "Image " << i + 1 << " captured: "
+                    << pImage->GetWidth() << " x " << pImage->GetHeight()
+                    << " | Pixel Format: " << pImage->GetPixelFormatName() << std::endl;
+            }
+        }
 
-		if (pImage->IsIncomplete()) {
-			std::cerr << "Image incomplete." << std::endl;
-		}
-		else {
-			const size_t width = pImage->GetWidth();
-			const size_t height = pImage->GetHeight();
+        std::cout << (images[0].get() == images[1].get() ? "Same" : "Not") << std::endl;
 
-			std::cout << "Image captured: " << width << " x " << height << std::
-			pImage->Save(filename.c_str());
+        int index = 0;
+        for (const auto& pImage : images) {
+            auto name = std::ostringstream{};
+            name << "grid2/image_" << index++ << ".png";
+			pImage->Save(name.str().c_str());
 		}
 
 		cam->EndAcquisition();
