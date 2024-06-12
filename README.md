@@ -15,8 +15,8 @@ Ensure that the Spinnaker SDK is installed in the following default directories:
 If the Spinnaker SDK is installed in a different location, update the paths accordingly in the `CMakeLists.txt` file:
 
 ```cmake
-include_directories("Your/Custom/Path/To/Spinnaker/include")
-link_directories("Your/Custom/Path/To/Spinnaker/lib64/vs2015")
+set(Spinnaker_INCLUDE_DIR"C:/Program Files/Teledyne/Spinnaker/include")
+link_directories("C:/Program Files/Teledyne/Spinnaker/lib64/vs2015")
 ```
 
 ## Steps to Run
