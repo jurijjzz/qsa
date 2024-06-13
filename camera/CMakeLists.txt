@@ -3,7 +3,8 @@ project(camera_bind)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(pybind11 CONFIG)
+find_package(pybind11 CONFIG
+    HINTS "../venv/Lib/site-packages/pybind11")
 
 # Spinnaker SDK
 if(WIN32)
@@ -30,7 +31,6 @@ add_executable (camera_test "main.cpp")
 
 target_link_libraries(camera_test PUBLIC ${Spinnaker_LIBS})
 target_include_directories(camera_test PUBLIC ${PROJECT_SOURCE_DIR} ${Spinnaker_INCLUDE_DIR})
-
 
 pybind11_add_module(camera camera_bind.cpp)
 target_link_libraries(camera PUBLIC ${Spinnaker_LIBS})

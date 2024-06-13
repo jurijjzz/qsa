@@ -1,1 +1,1 @@
-from build.camera import *
+from .out.build.camera import *

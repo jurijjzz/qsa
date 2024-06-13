@@ -49,7 +49,6 @@ for i in range((y1 - y0) // cell):
 for i, seq in enumerate(cycle(seqs)):
     alp42.start_projection(seq, cont=True)
     if i < len(seqs):
-        camera.start()
         camera.take_picture(f"imgs/pixel_size {cell};row {i // ((y1 - y0) // cell) + 1};column {i % ((y1 - y0) // cell) + 1}.png")
     else:
         command = input()

@@ -100,7 +100,7 @@ class Device:
             c_long(init_flag),
             pointer(self._device_id)
         )
-        _check_errors(res.value)
+        _check_errors(res)
 
     def __setitem__(self, key: ControlType, value: ControlValue):
         res = _alp_lib.AlpDevControl(

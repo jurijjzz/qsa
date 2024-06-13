@@ -60,12 +60,12 @@ void start_camera() {
 			}
 			else {
 				std::cerr << "Mono16 format not available." << std::endl;
-				return -1;
+				return;
 			}
 		}
 		else {
 			std::cerr << "Pixel format not writable." << std::endl;
-			return -1;
+			return;
 		}
 
 	} catch (Spinnaker::Exception& e) {
@@ -84,33 +84,23 @@ void stop_camera() {
 	syscam->ReleaseInstance();
 }
 
-void take_picture(std::string filename, std::size_t n=10) {
+void take_picture(std::string filename) {
 	try {
 		// Start taking picture
 		cam->BeginAcquisition();
-        std::cout << "Taking images..." << std::endl;
+		std::cout << "Taking image..." << std::endl;
 
-        // Capturing n images
-        for (size_t i = 0; i < n; i++) {
-            Spinnaker::ImagePtr pImage = cam->GetNextImage();
-            if (pImage->IsIncomplete()) {
-                std::cerr << "Image incomplete, skipping..." << std::endl;
-            }
-            else {
-                images.push_back(pImage);
-                std::cout << "Image " << i + 1 << " captured: "
-                    << pImage->GetWidth() << " x " << pImage->GetHeight()
-                    << " | Pixel Format: " << pImage->GetPixelFormatName() << std::endl;
-            }
-        }
+		Spinnaker::ImagePtr pImage = cam->GetNextImage();
 
-        std::cout << (images[0].get() == images[1].get() ? "Same" : "Not") << std::endl;
+		if (pImage->IsIncomplete()) {
+			std::cerr << "Image incomplete." << std::endl;
+		}
+		else {
+			const size_t width = pImage->GetWidth();
+			const size_t height = pImage->GetHeight();
 
-        int index = 0;
-        for (const auto& pImage : images) {
-            auto name = std::ostringstream{};
-            name << "grid2/image_" << index++ << ".png";
-			pImage->Save(name.str().c_str());
+			std::cout << "Image captured: " << width << " x " << height << std::endl;
+			pImage->Save(filename.c_str());
 		}
 
 		cam->EndAcquisition();
@@ -119,7 +109,7 @@ void take_picture(std::string filename, std::size_t n=10) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		cam->DeInit();
 		syscam->ReleaseInstance();
-		return ;
+		return;
 	}
 }
 
