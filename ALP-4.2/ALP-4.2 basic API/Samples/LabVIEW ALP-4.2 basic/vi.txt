@@ -1,0 +1,53 @@
+This is part of the ALP basic application programming interface.
+This sample application is contributed by 3rd party. It is
+provided as-is, without any warranty or support by ViALUX.
+
+Please always consult the ALP basic API description
+when customizing this program. It contains a detailled
+specification of all Alpb... functions.
+
+This very straightforward sample VI is intended to show
+how to use LabVIEW's built-in Call External Function
+node to utilize the ALP-4.2 basic DLL.
+Its function is to display a flashing square in the
+middle of the DMD area or the PNG File (ALP XGA.png or
+ALP 1080p.png) picture.
+This VI requires LabVIEW 8.0 or higher.
+
+It supports the XGA and the 1080p (emulation) DMD format.
+Modifications are necessary in order to use other DMD formats.
+
+
+Important hint for using this VI:
+=================================
+
+Loading the VI:
+The path to the DLL file is stored as absolute file
+system path. So it is likely that the DLL file
+cannot be found. In this case LabVIEW will query you
+for the right path. Please follow the instructions
+and point to the DLL file either on
+ALP-4.2 Installation CD or to a local copy of the DLL
+file.
+
+Please make sure that the ALP basic API DLL platform
+(32 or 64 bit) matches the LabVIEW environment.
+
+Stopping the VI:
+Do always use the "STOP" labelled button to terminate
+the VI and the projection!
+Hitting LabVIEW's "STOP" button (on the tool bar)
+will not terminate the ALP-4.2 basic DLL usage,
+and re-starting this VI again will always fail.
+If so, you must close and re-open this VI.
+
+
+Hint for using the ALPV42BASIC.DLL in your own VIs:
+===================================================
+
+The VI programmer must declare the function prototype
+as exactly as possible to the C prototype,
+and returnable values (C++: memory references,
+Delphi: VAR parameters) must be fed by any dummy value.
+Otherwise, LabVIEW will crash silently.
+

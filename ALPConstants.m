@@ -1,0 +1,206 @@
+clear all
+close all
+clc
+
+% Errors
+errorCode{1} = 'ALP_NOT_ONLINE';
+errorCode{2} = 'ALP_NOT_IDLE';
+errorCode{3} = 'ALP_NOT_AVAILABLE';
+errorCode{4} = 'ALP_NOT_READY';
+errorCode{5} = 'ALP_PARM_INVALID';
+errorCode{6} = 'ALP_ADDR_INVALID';
+errorCode{7} = 'ALP_MEMORY_FULL';
+errorCode{8} = 'ALP_SEQ_IN_USE';
+errorCode{9} = 'ALP_HALTED';
+errorCode{10} = 'ALP_ERROR_INI';
+errorCode{11} = 'ALP_ERROR_COMM';
+errorCode{12} = 'ALP_DEVICE_REMOVED';
+errorCode{13} = 'ALP_NOT_CONFIGURED';
+errorCode{14} = 'ALP_LOADER_VERSION';
+errorCode{18} = 'ALP_ERROR_POWER_DOWN';
+errorCode{19} = 'ALP_DRIVER_VERSION';
+errorCode{20} = 'ALP_SDRAM_INIT';
+
+% Special values
+ALP_DEFAULT = int32(0);
+ALP_INVALID_ID = uint32(4294967295);
+
+% Return values
+ALP_OK = int32(0);
+ALP_NOT_ONLINE = int32(1001);
+ALP_NOT_IDLE = int32(1002);
+ALP_NOT_AVAILABLE = int32(1003);
+ALP_NOT_READY = int32(1004);
+ALP_PARM_INVALID = int32(1005);
+ALP_ADDR_INVALID = int32(1006);
+ALP_MEMORY_FULL = int32(1007);
+ALP_SEQ_IN_USE = int32(1008);
+ALP_HALTED = int32(1009);
+ALP_ERROR_INIT = int32(1010);
+ALP_ERROR_COMM = int32(1011);
+ALP_DEVICE_REMOVED = int32(1012);
+ALP_NOT_CONFIGURED = int32(1013);
+ALP_LOADER_VERSION = int32(1014);
+ALP_ERROR_POWER_DOWN = int32(1018);
+ALP_DRIVER_VERSION = int32(1019);
+ALP_SDRAM_INIT = int32(1020);
+
+% Device Inquire and Control Types (AlpDevControl, AlpDevInquire)
+ALP_DEV_BUSY = int32(1100);
+ALP_DEV_READY = int32(1101);
+ALP_DEV_IDLE = int32(1102);
+ALP_DEVICE_NUMBER = int32(2000);
+ALP_VERSION = int32(2001);
+ALP_AVAIL_MEMORY = int32(2003);
+ALP_SYNCH_POLARITY = int32(2004);
+ALP_TRIGGER_EDGE = int32(2005);
+ALP_LEVEL_HIGH = int32(2006);
+ALP_LEVEL_LOW = int32(2007);
+ALP_EDGE_FALLING = int32(2008);
+ALP_EDGE_RISING = int32(2009);
+ALP_TRIGGER_TIME_OUT = int32(2014);
+ALP_TIME_OUT_ENABLE = int32(0);
+ALP_TIME_OUT_DISABLE = int32(1);
+ALP_DEV_DMDTYPE = int32(2021);
+ALP_DMDTYPE_XGA = int32(1);
+ALP_DMDTYPE_1080P_095A = int32(3);
+ALP_DMDTYPE_XGA_07A = int32(4);
+ALP_DMDTYPE_XGA_055X = int32(6);
+ALP_DMDTYPE_WUXGA_096A = int32(7);
+ALP_DMDTYPE_DISCONNECT = int32(255);
+ALP_USB_CONNECTION = int32(2016);
+ALP_DEV_DYN_SYNCH_OUT1_GATE = int32(2023);
+ALP_DEV_DYN_SYNCH_OUT2_GATE = int32(2024);
+ALP_DEV_DYN_SYNCH_OUT3_GATE = int32(2025);
+ALP_DDC_FPGA_TEMPERATURE = int32(2050);
+ALP_APPS_FPGA_TEMPERATURE = int32(2051);
+ALP_PCB_TEMPERATURE = int32(2052);
+ALP_DEV_DISPLAY_HEIGHT = int32(2057);
+ALP_DEV_DISPLAY_WIDTH = int32(2058);
+ALP_PWM_LEVEL = int32(2063);
+ALP_DEV_DMD_MODE = int32(2064);
+ALP_DMD_RESUME = int32(0);
+ALP_DMD_POWER_FLOAT = int32(1);
+
+% Sequence Inquire and Control Types (AlpSeqControl, AlpSeqInquire)
+ALP_BITPLANES = int32(2200);
+ALP_BITNUM = int32(2103);
+ALP_BIN_MODE = int32(2104);
+ALP_BIN_NORMAL = int32(2105);
+ALP_BIN_UNINTERRUPTED = int32(2106);
+ALP_PICNUM = int32(2201);
+ALP_FIRSTFRAME = int32(2101);
+ALP_LASTFRAME = int32(2102);
+ALP_FIRSTLINE = int32(2111);
+ALP_LASTLINE = int32(2112);
+ALP_LINE_INC = int32(2113);
+ALP_SCROLL_FROM_ROW = int32(2123);
+ALP_SCROLL_TO_ROW = int32(2124);
+ALP_SEQ_REPEAT = int32(2100);
+ALP_PICTURE_TIME = int32(2203);
+ALP_MIN_PICTURE_TIME = int32(2211);
+ALP_MAX_PICTURE_TIME = int32(2213);
+ALP_ILLUMINATE_TIME = int32(2204);
+ALP_MIN_ILLUMINATE_TIME = int32(2212);
+ALP_ON_TIME = int32(2214);
+ALP_OFF_TIME = int32(2215);
+ALP_SYNCH_DELAY = int32(2205);
+ALP_MAX_SYNCH_DELAY = int32(2209);
+ALP_SYNCH_PULSEWIDTH = int32(2206);
+ALP_TRIGGER_IN_DELAY = int32(2207);
+ALP_MAX_TRIGGER_IN_DELAY = int32(2210);
+ALP_DATA_FORMAT = int32(2110);
+ALP_DATA_MSB_ALIGN = int32(0);
+ALP_DATA_LSB_ALIGN = int32(1);
+ALP_DATA_BINARY_TOPDOWN = int32(2);
+ALP_DATA_BINARY_BOTTOMUP = int32(3);
+ALP_SEQ_PUT_LOCK = int32(2119);
+ALP_FLUT_MODE = int32(2118);
+ALP_FLUT_NONE = int32(0);
+ALP_FLUT_9BIT = int32(1);
+ALP_FLUT_18BIT = int32(2);
+ALP_FLUT_ENTRIES9 = int32(2120);
+ALP_FLUT_OFFSET9 = int32(2122);
+ALP_PWM_MODE = int32(2107);
+ALP_FLEX_PWM = int32(3);
+
+% Projection Inquire and Control Types (AlpProjControl[Ex], AlpProjInquire[Ex])
+ALP_PROJ_MODE = int32(2300);
+ALP_MASTER = int32(2301);
+ALP_SLAVE = int32(2302);
+ALP_PROJ_STEP = int32(2329);
+ALP_PROJ_STATE = int32(2400);
+ALP_PROJ_ACTIVE = int32(1200);
+ALP_PROJ_IDLE = int32(1201);
+ALP_PROJ_INVERSION = int32(2306);
+ALP_PROJ_UPSIDE_DOWN = int32(2307);
+ALP_PROJ_QUEUE_MODE = int32(2314);
+ALP_PROJ_LEGACY = int32(0);
+ALP_PROJ_SEQUENCE_QUEUE = int32(1);
+ALP_PROJ_QUEUE_ID = int32(2315);
+ALP_PROJ_QUEUE_MAX_AVAIL = int32(2316);
+ALP_PROJ_QUEUE_AVAIL = int32(2317);
+ALP_PROJ_PROGRESS = int32(2318);
+ALP_FLAG_QUEUE_IDLE = uint32(1);
+ALP_FLAG_SEQUENCE_ABORTING = uint32(2);
+ALP_FLAG_SEQUENCE_INDEFINITE = uint32(4);
+ALP_FLAG_FRAME_FINISHED = uint32(8);
+ALP_PROJ_RESET_QUEUE = int32(2319);
+ALP_PROJ_ABORT_SEQUENCE = int32(2320);
+ALP_PROJ_ABORT_FRAME = int32(2321);
+ALP_PROJ_WAIT_UNTIL = int32(2323);
+ALP_PROJ_WAIT_PIC_TIME = int32(0);
+ALP_PROJ_WAIT_ILLU_TIME = int32(1);
+ALP_FLUT_MAX_ENTRIES9 = int32(2324);
+ALP_FLUT_WRITE_9BIT = int32(2325);
+ALP_FLUT_WRITE_18BIT = int32(2326);
+
+% % LED Types
+% ALP_HLD_PT120_RAX = int32(268);
+% ALP_HLD_PT120_RED = int32(257);
+% ALP_HLD_PT120_GREEN = int32(258);
+% ALP_HLD_PT120TE_BLUE = int32(263);
+% ALP_HLD_PT120_BLUE = int32(259);
+% ALP_HLD_CBT90_UV = int32(265);
+% ALP_HLD_CBM120_UV365 = int32(266);
+% ALP_HLD_CBM120_UV = int32(267);
+% ALP_HLD_CBT120_UV = int32(260);
+% ALP_HLD_CBT90_WHITE = int32(262);
+% ALP_HLD_CBT140_WHITE = int32(264);
+% 
+% % LED Inquire and Control Types (AlpLedControl, AlpLedInquire)
+% ALP_LED_SET_CURRENT = int32(1001);
+% ALP_LED_BRIGHTNESS = int32(1002);
+% ALP_LED_FORCE_OFF = int32(1003);
+% ALP_LED_AUTO_OFF = int32(0);
+% ALP_LED_OFF = int32(1);
+% ALP_LED_ON = int32(2);
+% ALP_LED_TYPE = int32(1101);
+% ALP_LED_MEASURED_CURRENT = int32(1102);
+% ALP_LED_TEMPERATURE_REF = int32(1103);
+% ALP_LED_TEMPERATURE_JUNCTION = int32(1104);
+% 
+% % Extended LED Inquire and Control Types (AlpLedControlEx, AlpLedInquireEx)
+% ALP_LED_ALLOC_PARAMS = int32(2101);
+
+% Struct definitions
+tAlpDynSynchOutGate.Period = uint8(0);
+tAlpDynSynchOutGate.Polarity = uint8(0);
+tAlpDynSynchOutGate.Gate = uint8(zeros(16, 1));
+tFlutWrite.nOffset = int32(0);
+tFlutWrite.nSize = int32(0);
+tFlutWrite.FrameNumbers = uint32(zeros(4096, 1));
+tAlpProjProgress.CurrentQueueId = uint32(0);
+tAlpProjProgress.SequenceId = uint32(0);
+tAlpProjProgress.nWaitingSequences = uint32(0);
+tAlpProjProgress.nSequenceCounter = uint32(0);
+tAlpProjProgress.nSequenceCounterUnderflow = uint32(0);
+tAlpProjProgress.nFrameCounter = uint32(0);
+tAlpProjProgress.nPictureTime = uint32(0);
+tAlpProjProgress.nFramesPerSubSequence = uint32(0);
+tAlpProjProgress.nFlags = uint32(0);
+% tAlpHldAllocParams.I2cDacAddr = int32(0);
+% tAlpHldAllocParams.I2cAdcAddr = int32(0);
+
+% Save them
+save('ALPConstants')
