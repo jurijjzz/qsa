@@ -81,5 +81,6 @@ link_directories("C:/Program Files/Teledyne/Spinnaker/lib64/vs2015")
 ### Additional Tips:
 - Make sure to review the Spinnaker SDK documentation for any specific setup or configuration details related to the FLIR Grasshopper 3 camera.
 - It's often helpful to verify the camera's connection and functionality using any provided diagnostic tools or sample applications from FLIR before integrating it into your project.
+- Good luck!!!
 
 This updated documentation now includes important details about ensuring that the Spinnaker SDK is installed in the correct location, and how to adjust the paths in `CMakeLists.txt` if necessary. This will be helpful for developers needing to customize their environment setup.
