@@ -44,10 +44,11 @@ link_directories("C:/Program Files/Teledyne/Spinnaker/lib64/vs2015")
      source venv/bin/activate
      ```
 
-### 3. Install requirements
-      ```bash
-      pip.exe install -r requirements.txt
-      ```
+### 3. Install Requirements:
+   - **Requirements:** Includes Numpy, OpenCV, pybind11
+     ```bash
+     pip.exe install -r requirements.txt
+     ```
 
 ### 4. Install pybind11:
    - **Install Command:** With the virtual environment activated, install pybind11 using pip:
