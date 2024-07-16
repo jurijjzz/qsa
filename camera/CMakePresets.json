@@ -18,7 +18,7 @@
             }
         },
         {
-            "name": "x64_debug",
+            "name": "x64-debug",
             "displayName": "x64 Debug",
             "inherits": "windows-base",
             "architecture": {
@@ -38,7 +38,7 @@
             }
         },
         {
-            "name": "x86_debug",
+            "name": "x86-debug",
             "displayName": "x86 Debug",
             "inherits": "windows-base",
             "architecture": {
